@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Admin Dashboard</h1>
+
+        <a href="/">Logout</a>
+    </header>
+
+    <div class="container">
+
+        <div class="card">
+            <h2>Add Product</h2>
+            <p>Add new products to your store.</p>
+
+            <a href="/add_product">
+                <button>Add Product</button>
+            </a>
+        </div>
+
+        <div class="card">
+            <h2>View Products</h2>
+            <p>See all available products.</p>
+
+            <a href="/view_products">
+                <button>View Products</button>
+            </a>
+        </div>
+
+        <div class="card">
+            <h2>Edit Products</h2>
+            <p>Update product information.</p>
+
+            <a href="/edit_products">
+                <button>Edit Products</button>
+            </a>
+        </div>
+
+        <div class="card">
+            <h2>Delete Products</h2>
+            <p>Remove unwanted products.</p>
+
+            <a href="/delete_products">
+                <button>Delete Products</button>
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

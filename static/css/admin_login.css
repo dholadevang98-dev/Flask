@@ -1,0 +1,96 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background-image:url("../images/admin-bg.jpg");
+    background-size:cover;
+    background-position:center;
+}
+
+.container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.login-box{
+
+    width:380px;
+
+    background:rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(10px);
+
+    padding:40px;
+
+    border-radius:15px;
+
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+
+    text-align:center;
+}
+
+.login-box h2{
+    color:white;
+    margin-bottom:25px;
+}
+
+.login-box input{
+
+    width:100%;
+
+    padding:12px;
+
+    margin:12px 0;
+
+    border:none;
+
+    border-radius:8px;
+
+    outline:none;
+}
+
+.login-box button{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#007BFF;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:0.3s;
+}
+
+.login-box button:hover{
+
+    background:#0056b3;
+}
+
+.message{
+
+    color:yellow;
+
+    margin-bottom:15px;
+
+    font-weight:bold;
+}
