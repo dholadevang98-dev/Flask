@@ -30,7 +30,7 @@ def admin_page():
 
 
 
-@app.route('/welcome')
+@app.route('/index')
 def welcome():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM products")
@@ -42,7 +42,7 @@ def welcome():
     for product in products:
         print(product)
 
-    return render_template("welcome.html", products=products)
+    return render_template("/index.html", products=products)
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
     if request.method == 'POST':
@@ -64,7 +64,7 @@ def add_product():
         cur.close()
 
         flash("Product Added Successfully!")
-        return redirect("/welcome")
+        return redirect("/index")
 
     return render_template("add_product.html")
 
@@ -137,7 +137,7 @@ def login():
     cur.close()
     if user:
         flash("Login Successful!", "success")
-        return redirect("/welcome")
+        return redirect("/index")
     else:
         flash("Invalid Username or Password!", "danger")
         return redirect('/')
