@@ -10,13 +10,11 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.secret_key = os.getenv("SECRET_KEY", "secretkey123")
 
 conn = pymysql.connect(
-    host=os.getenv("MYSQL_HOST"),
-    port=int(os.getenv("MYSQL_PORT")),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    database=os.getenv("MYSQL_DB"),
-    cursorclass=pymysql.cursors.DictCursor,
-    autocommit=False
+    host=os.getenv("MYSQL_HOST", "autorack.proxy.rlwy.net"),
+    port=int(os.getenv("MYSQL_PORT", "41814")),
+    user=os.getenv("MYSQL_USER", "root"),
+    password=os.getenv("MYSQL_PASSWORD", "YFNJZHhTkOXgZiGcNrYnxzsQrIDXKmlH"),
+    database=os.getenv("MYSQL_DB", "railway")
 )
 
 

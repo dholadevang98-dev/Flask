@@ -15,13 +15,13 @@
         <input type="text" name="product_name" value="{{ product[1] }}"><br><br>
 
         <label>Quantity</label><br>
-        <input type="number" name="quantity" value="{{ product[2] }}"><br><br>
+        <input type="number" name="quantity" value="{{ product[4] }}"><br><br>
 
         <label>Price</label><br>
-        <input type="number" name="price" value="{{ product[3] }}"><br><br>
+        <input type="number" name="price" value="{{ product[2] }}"><br><br>
 
         <label>Current Image</label><br>
-        <img src="{{ url_for('static', filename='images/products/' + product[4]) }}"
+        <img src="{{ url_for('static', filename='images/products/' + product[3]) }}"
              width="150"><br><br>
 
         <label>New Image</label><br>

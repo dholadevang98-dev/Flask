@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,35 +8,49 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
+
 <body>
 
     <header>
-        <h1>Admin Dashboard</h1>
+
+        <h1>🛒 Admin Dashboard</h1>
 
         <a href="/">Logout</a>
+
     </header>
 
     <div class="container">
 
         <div class="card">
+
+            <div class="icon">➕</div>
+
             <h2>Add Product</h2>
+
             <p>Add new products to your store.</p>
 
             <a href="/add_product">
                 <button>Add Product</button>
             </a>
+
         </div>
+
         <div class="card">
-            <h2>View Product</h2>
-            <p>View Your Added Products.</p>
+
+            <div class="icon">📦</div>
+
+            <h2>View Products</h2>
+
+            <p>Manage your existing products.</p>
 
             <a href="/view_product">
-                <button>View Product</button>
+                <button>View Products</button>
             </a>
+
         </div>
-    
 
     </div>
 
 </body>
+
 </html>
