@@ -5,15 +5,18 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "static/images/products"
-app.secret_key = "secretkey123"
+app.secret_key = os.getenv("SECRET_KEY", "secretkey123")
 
+app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST", "autorack.proxy.rlwy.net")
+app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", 41814))
+app.config["MYSQL_USER"] = os.getenv("MYSQL_USER", "root")
+app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD", "YFNJZHhTkOXgZiGcNrYnxzsQrIDXKmlH")
+app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "railway")
 
-
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Devang@123'
-app.config['MYSQL_DB'] = 'login'
+print("HOST :", app.config["MYSQL_HOST"])
+print("PORT :", app.config["MYSQL_PORT"])
+print("USER :", app.config["MYSQL_USER"])
+print("DB   :", app.config["MYSQL_DB"])
 
 mysql = MySQL(app)
 
@@ -26,9 +29,59 @@ def login_page():
 @app.route('/admin_login')
 def admin_page():
     return render_template("admin_login.html")
+@app.route("/admin_dashboard")
+def admin_dashboard():
+    return render_template("admin_dashboard.html")
 
+@app.route("/delete_product/<int:id>",methods=['GET'])
+def delete_product(id):
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM products WHERE id=%s", (id,))
+    mysql.connection.commit()
+    cur.close()
+    flash("Product Deleted Succesfully....")
+    return redirect("/view_product")
+    
+@app.route("/edit_product/<int:id>",methods=['GET','POST'])
+def edit_product(id):
+    
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        cur.execute("SELECT * FROM products WHERE id=%s",(id,))
+        product = cur.fetchone()
+        return render_template("edit_product.html",product=product)
+        
+        
+    product_name = request.form["product_name"]
+    quantity = request.form["quantity"]
+    price = request.form["price"]
 
+    image = request.files["image"]
+    if image.filename != "":
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
+        cur.execute("""UPDATE products 
+        SET product_name=%s,quantity=%s,price=%s,image=%s WHERE id=%s
+        """, (product_name, quantity, price, filename, id))
+
+    else:
+        cur.execute("""UPDATE products SET product_name=%s,
+        quantity=%s,price=%s WHERE id=%s""", 
+        (product_name, quantity, price, id))
+
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Product Updated Successfully")
+    return redirect("/view_product")
+@app.route('/view_product')
+def view_product():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM products")
+    products = cur.fetchall()
+    cur.close()
+    return render_template("view_product.html",products=products)
 
 @app.route('/index')
 def welcome():
@@ -38,9 +91,6 @@ def welcome():
     cur.close()
 
     print(products)
-
-    for product in products:
-        print(product)
 
     return render_template("/index.html", products=products)
 @app.route('/add_product', methods=['GET', 'POST'])
@@ -86,7 +136,7 @@ def admin_login():
     cur.close()
     if user:
         flash("Login Successful!", "success")
-        return render_template("admin_dashboard.html", username=username)
+        return redirect("/admin_dashboard")
     else:
         flash("Invalid Username or Password!", "danger")
         return redirect('/')

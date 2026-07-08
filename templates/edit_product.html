@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Product</title>
+</head>
+
+<body>
+
+    <h1>Edit Product</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <label>Product Name</label><br>
+        <input type="text" name="product_name" value="{{ product[1] }}"><br><br>
+
+        <label>Quantity</label><br>
+        <input type="number" name="quantity" value="{{ product[2] }}"><br><br>
+
+        <label>Price</label><br>
+        <input type="number" name="price" value="{{ product[3] }}"><br><br>
+
+        <label>Current Image</label><br>
+        <img src="{{ url_for('static', filename='images/products/' + product[4]) }}"
+             width="150"><br><br>
+
+        <label>New Image</label><br>
+        <input type="file" name="image"><br><br>
+
+        <input type="submit" value="Update Product">
+
+    </form>
+
+    <br>
+
+    <a href="/view_product">
+        <button type="button">Back</button>
+    </a>
+
+</body>
+
+</html>

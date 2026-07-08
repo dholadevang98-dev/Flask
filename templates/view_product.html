@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin - View Products</title>
+</head>
+
+<body>
+
+    <h1>Admin - View Products</h1>
+
+    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+
+        {% for product in products %}
+
+        <div style="border:1px solid black; padding:15px; width:250px; text-align:center;">
+
+            <img src="{{ url_for('static', filename='images/products/' + product[4]) }}" width="200" height="200">
+
+            <h2>{{ product[1] }}</h2>
+
+            <h3>Price : ₹ {{ product[3] }}</h3>
+
+            <p>Quantity : {{ product[2] }}</p>
+
+            <a href="/edit_product/{{ product[0] }}">
+                <button>Edit</button>
+            </a>
+
+            <a href="/delete_product/{{ product[0] }}">
+                <button>Delete</button>
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+
+</html>
