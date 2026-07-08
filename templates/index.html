@@ -9,26 +9,109 @@
 
     <h1>Products</h1>
 
-    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+    <body>
 
-        {% for product in products %}
 
-        <div style="border:1px solid black; padding:10px; width:250px; text-align:center;">
+        <div style="text-align:center; margin:25px 0;">
 
-            <h2>{{ product[1] }}</h2>
+            <form action="/search" method="GET">
 
-            <h3>₹ {{ product[2] }}</h3>
+                <input type="text" name="q" placeholder="🔍 Search Products..." style="width:350px;
+                      padding:12px;
+                      border-radius:30px;
+                      border:1px solid #ccc;
+                      font-size:16px;">
 
-            <p>Stock : {{ product[4] }}</p>
+                <button type="submit" style="padding:12px 25px;
+                       background:#2563eb;
+                       color:white;
+                       border:none;
+                       border-radius:30px;
+                       cursor:pointer;
+                       margin-left:10px;">
 
-            <img src="{{ url_for('static', filename='images/products/' + product[3]) }}" width="180">
+                    Search
+
+                </button>
+
+            </form>
 
         </div>
 
-        {% endfor %}
+        <div style="display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:20px;">
 
-    </div>
+            <div style="display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:30px;
+            padding:30px;">
 
-</body>
+                {% for product in products %}
+
+                <div style="
+        width:280px;
+        background:#ffffff;
+        border-radius:15px;
+        overflow:hidden;
+        box-shadow:0 8px 20px rgba(0,0,0,0.15);
+        transition:0.3s;
+        text-align:center;
+        padding:20px;
+    ">
+
+                    <img src="{{ url_for('static', filename='images/products/' + product[3]) }}" style="
+                width:200px;
+                height:180px;
+                object-fit:cover;
+                border-radius:10px;
+             ">
+
+                    <h2 style="
+            margin:15px 0 10px;
+            color:#222;
+            font-size:24px;
+        ">
+                        {{ product[1] }}
+                    </h2>
+
+                    <h3 style="
+            color:#28a745;
+            font-size:26px;
+            margin-bottom:10px;
+        ">
+                        ₹ {{ product[2] }}
+                    </h3>
+
+                    <p style="
+            color:#555;
+            margin-bottom:20px;
+            font-size:16px;
+        ">
+                        <strong>Stock:</strong> {{ product[4] }}
+                    </p>
+
+                    <button style="
+            background:#2563eb;
+            color:white;
+            border:none;
+            padding:12px 25px;
+            border-radius:30px;
+            cursor:pointer;
+            font-size:16px;
+            font-weight:bold;
+        ">
+                        Add To Card
+                    </button>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+    </body>
 
 </html>

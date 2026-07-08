@@ -31,6 +31,18 @@ def admin_page():
 def admin_dashboard():
     return render_template("admin_dashboard.html")
 
+@app.route('/search')
+def search():
+    q = request.args.get("q")
+
+    cur = conn.cursor()
+    cur.execute(
+    "SELECT * FROM products WHERE product_name LIKE %s",
+    ("%" + q + "%",))
+
+    products = cur.fetchall()
+    return render_template("index.html",products=products)
+
 @app.route("/delete_product/<int:id>",methods=['GET'])
 def delete_product(id):
     cur = conn.cursor()
