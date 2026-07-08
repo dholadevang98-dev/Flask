@@ -6,6 +6,7 @@ import pymysql
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "static/images/products"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.secret_key = os.getenv("SECRET_KEY", "secretkey123")
 
 conn = pymysql.connect(
@@ -67,7 +68,7 @@ def edit_product(id):
         quantity=%s,price=%s WHERE id=%s""", 
         (product_name, quantity, price, id))
 
-    conn.commit
+    conn.commit()
     cur.close()
 
     flash("Product Updated Successfully")
