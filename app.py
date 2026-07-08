@@ -1,24 +1,21 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, flash
-from flask_mysqldb import MySQL
+import pymysql
+
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "static/images/products"
 app.secret_key = os.getenv("SECRET_KEY", "secretkey123")
 
-app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST", "autorack.proxy.rlwy.net")
-app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", 41814))
-app.config["MYSQL_USER"] = os.getenv("MYSQL_USER", "root")
-app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD", "YFNJZHhTkOXgZiGcNrYnxzsQrIDXKmlH")
-app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "railway")
+conn = pymysql.connect(
+    host=os.getenv("MYSQL_HOST"),
+    port=int(os.getenv("MYSQL_PORT")),
+    user=os.getenv("MYSQL_USER"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    database=os.getenv("MYSQL_DB")
+)
 
-print("HOST :", app.config["MYSQL_HOST"])
-print("PORT :", app.config["MYSQL_PORT"])
-print("USER :", app.config["MYSQL_USER"])
-print("DB   :", app.config["MYSQL_DB"])
-
-mysql = MySQL(app)
 
 @app.route('/register')
 def register_page():
@@ -35,9 +32,9 @@ def admin_dashboard():
 
 @app.route("/delete_product/<int:id>",methods=['GET'])
 def delete_product(id):
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
     cur.execute("DELETE FROM products WHERE id=%s", (id,))
-    mysql.connection.commit()
+    conn.commit()
     cur.close()
     flash("Product Deleted Succesfully....")
     return redirect("/view_product")
@@ -45,7 +42,7 @@ def delete_product(id):
 @app.route("/edit_product/<int:id>",methods=['GET','POST'])
 def edit_product(id):
     
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
     if request.method == "GET":
         cur.execute("SELECT * FROM products WHERE id=%s",(id,))
         product = cur.fetchone()
@@ -70,14 +67,14 @@ def edit_product(id):
         quantity=%s,price=%s WHERE id=%s""", 
         (product_name, quantity, price, id))
 
-    mysql.connection.commit()
+    conn.commit
     cur.close()
 
     flash("Product Updated Successfully")
     return redirect("/view_product")
 @app.route('/view_product')
 def view_product():
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
     cur.execute("SELECT * FROM products")
     products = cur.fetchall()
     cur.close()
@@ -85,7 +82,7 @@ def view_product():
 
 @app.route('/index')
 def welcome():
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
     cur.execute("SELECT * FROM products")
     products = cur.fetchall()
     cur.close()
@@ -104,13 +101,13 @@ def add_product():
         filename = secure_filename(image.filename)
         image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
-        cur = mysql.connection.cursor()
+        cur = conn.cursor()
         cur.execute("""
             INSERT INTO products(product_name, price, image, quantity)
             VALUES (%s, %s, %s, %s)
         """, (product_name, price, filename, quantity))
 
-        mysql.connection.commit()
+        conn.commit()
         cur.close()
 
         flash("Product Added Successfully!")
@@ -126,7 +123,7 @@ def admin_login():
     if username == "" or password == "":
         flash("Please fill all fields", "danger")
         return redirect('/admin_login')
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
     cur.execute(
     "SELECT * FROM admin WHERE username=%s AND password=%s",
         (username, password)
@@ -150,14 +147,14 @@ def register():
         flash("Please fill all fields", "danger")
         return redirect('/register')
 
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
 
     cur.execute(
         "INSERT INTO lgn(username,password) VALUES(%s,%s)",
         (username, password)
     )
 
-    mysql.connection.commit()
+    conn.commit()
     cur.close()
 
     flash("Registration Successful! Please Login.", "success")
@@ -176,7 +173,7 @@ def login():
         flash("Please fill all fields", "danger")
         return redirect('/')
 
-    cur = mysql.connection.cursor()
+    cur = conn.cursor()
 
     cur.execute(
         "SELECT * FROM lgn WHERE username=%s AND password=%s",
