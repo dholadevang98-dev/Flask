@@ -31,6 +31,44 @@ def admin_page():
 def admin_dashboard():
     return render_template("admin_dashboard.html")
 
+
+@app.route("/add_to_cart/<int:id>")
+def add_to_cart(id):
+
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM cart WHERE product_id=%s",(id))
+    item = cur.fetchone()
+
+    if item:
+        cur.execute("UPDATE cart SET quantity = quantity + 1 WHERE product_id=%s",
+            (id,))
+    else:
+        cur.execute("INSERT INTO cart(product_id, quantity) VALUES(%s,%s)",
+            (id,1))
+    conn.commit()
+    cur.close()
+
+    return redirect("/cart")
+
+@app.route("/cart")
+def cart():
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT
+    cart.id,
+    products.product_name,
+    products.price,
+    products.image,
+    cart.quantity
+    FROM cart
+    JOIN products
+    ON cart.product_id = products.id
+    """)
+
+    product = cur.fetchall()
+    cur.close()
+    return render_template("cart.html",products=product)
 @app.route('/search')
 def search():
     q = request.args.get("q")
